@@ -1,0 +1,618 @@
+/* ============================================================================
+   index.css — Philly Shadow Analyst Design System
+   ============================================================================
+   Design aesthetic: Dark glassmorphism on a near-black background.
+   Accent palette: Amber/gold (reflecting sunlight and shadow themes).
+   Typography: Inter (Google Fonts) for a clean, modern feel.
+   ============================================================================ */
+
+/* --------------------------------------------------------------------------
+   1. Google Fonts Import
+   -------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* --------------------------------------------------------------------------
+   2. CSS Custom Properties (Design Tokens)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Color palette */
+  --color-bg:            #080c14;       /* Near-black deep space */
+  --color-surface:       rgba(12, 18, 32, 0.75);  /* Glass panel base */
+  --color-surface-hover: rgba(18, 26, 46, 0.85);
+  --color-border:        rgba(255, 255, 255, 0.08);
+  --color-border-focus:  rgba(245, 158, 11, 0.5);  /* Amber focus ring */
+
+  /* Accent — amber/gold (sun/shadow motif) */
+  --color-accent:        #F59E0B;       /* Amber 500 */
+  --color-accent-bright: #FCD34D;       /* Amber 300 — for highlights */
+  --color-accent-dim:    rgba(245, 158, 11, 0.15);
+
+  /* Text */
+  --color-text-primary:  rgba(255, 255, 255, 0.92);
+  --color-text-secondary: rgba(255, 255, 255, 0.5);
+  --color-text-muted:    rgba(255, 255, 255, 0.3);
+
+  /* Status */
+  --color-error:         #F87171;       /* Red 400 */
+  --color-error-bg:      rgba(248, 113, 113, 0.12);
+  --color-success:       #34D399;       /* Emerald 400 */
+
+  /* Glass effect */
+  --glass-blur:          16px;
+  --glass-border:        1px solid var(--color-border);
+  --glass-shadow:        0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* Spacing */
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   14px;
+  --space-lg:   20px;
+  --space-xl:   28px;
+
+  /* Radii */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+
+  /* Typography */
+  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-mid:  200ms ease;
+}
+
+/* --------------------------------------------------------------------------
+   3. Reset & Base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;           /* Prevent scroll — the globe fills the viewport */
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   4. Glass Panel Utility
+   -------------------------------------------------------------------------- */
+.glass-panel {
+  background: var(--color-surface);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+}
+
+/* --------------------------------------------------------------------------
+   5. Floating Panel Layout
+   -------------------------------------------------------------------------- */
+.floating-panel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 340px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1000;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.floating-panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.floating-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.floating-panel::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   6. Panel Header
+   -------------------------------------------------------------------------- */
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.panel-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-accent), #D97706);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+  flex-shrink: 0;
+  color: #1a0a00;
+  animation: logo-pulse 4s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(245, 158, 11, 0.35); }
+  50%       { box-shadow: 0 0 24px rgba(245, 158, 11, 0.6); }
+}
+
+.panel-title-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  /* h1 is used here for semantic SEO — styled small to fit the panel */
+}
+
+.panel-subtitle {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+.panel-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 0 calc(var(--space-sm) * -1);  /* bleed to panel edges */
+}
+
+/* --------------------------------------------------------------------------
+   7. Search Form
+   -------------------------------------------------------------------------- */
+.search-form {
+  width: 100%;
+}
+
+.search-input-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  height: 40px;
+  padding: 0 var(--space-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  outline: none;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.search-input:focus {
+  border-color: var(--color-border-focus);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 3px var(--color-accent-dim);
+}
+
+.search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--color-accent), #D97706);
+  border: none;
+  border-radius: var(--radius-md);
+  color: #1a0a00;
+  cursor: pointer;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.search-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+}
+
+.search-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.search-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. Loading Spinner
+   -------------------------------------------------------------------------- */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(26, 10, 0, 0.3);
+  border-top-color: #1a0a00;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   9. Property Info Card
+   -------------------------------------------------------------------------- */
+.property-card {
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  animation: slide-in 0.25s ease forwards;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.property-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.property-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.property-card-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.property-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.property-address {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.property-owner {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   10. Error Toast
+   -------------------------------------------------------------------------- */
+.error-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-error-bg);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius-md);
+  color: var(--color-error);
+  font-size: 12px;
+  line-height: 1.5;
+  animation: slide-in 0.2s ease forwards;
+}
+
+.error-toast svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--color-error);
+}
+
+.error-toast-message {
+  flex: 1;
+}
+
+.error-toast-dismiss {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-error);
+  cursor: pointer;
+  font-size: 12px;
+  opacity: 0.7;
+  padding: 0 2px;
+  transition: opacity var(--transition-fast);
+  line-height: 1;
+}
+
+.error-toast-dismiss:hover {
+  opacity: 1;
+}
+
+/* ========================================================================= */
+/* ArcGIS-Style Navigation Stack                                             */
+/* ========================================================================= */
+
+.arcgis-nav-stack {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
+}
+
+.nav-box {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-box.column {
+  flex-direction: column;
+}
+
+.nav-btn-stack {
+  background: white;
+  border: none;
+  color: #555;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.nav-btn-stack:hover {
+  background: #f3f4f6;
+  color: #111;
+}
+
+.nav-btn-stack:active {
+  background: #e5e7eb;
+}
+
+.has-border-bottom {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.active-mode {
+  background: #e0f2fe; /* light blue */
+  color: #0284c7; /* darker blue */
+}
+
+.active-mode:hover {
+  background: #bae6fd;
+}
+
+.compass-box {
+  border-radius: 20px; /* makes it a circle */
+  width: 40px;
+  height: 40px;
+}
+
+.compass-btn {
+  border-radius: 20px;
+  color: #666;
+}
+
+/* --------------------------------------------------------------------------
+   11. Time Controls & Sliders
+   -------------------------------------------------------------------------- */
+.time-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.slider-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.01em;
+  cursor: default;
+}
+
+.slider-icon {
+  width: 13px;
+  height: 13px;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.slider-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-accent-bright);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  min-width: 60px;
+  text-align: right;
+}
+
+/* Custom range slider */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Webkit track fill — uses a background gradient trick */
+.slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--color-accent) 0%,
+    var(--color-accent) calc(var(--val, 50) * 1%),
+    rgba(255,255,255,0.08) calc(var(--val, 50) * 1%),
+    rgba(255,255,255,0.08) 100%
+  );
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+  cursor: pointer;
+  margin-top: -6px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.7);
+}
+
+.slider::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.08);
+}
+
+.slider::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-accent);
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--color-accent-dim), 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+.slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.01em;
+  padding: 0 2px;
+}
+
+/* --------------------------------------------------------------------------
+   12. Cesium Widget Overrides
+   -------------------------------------------------------------------------- */
+
+/* Hide the Cesium credit/attribution bar — it overlaps the UI at the bottom */
+.cesium-widget-credits {
+  display: none !important;
+}
+
+/* Ensure the Cesium canvas is truly full-screen */
+.cesium-viewer,
+.cesium-widget,
+.cesium-widget canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* --------------------------------------------------------------------------
+   13. Responsive Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .floating-panel {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-height: 65vh;
+  }
+}
