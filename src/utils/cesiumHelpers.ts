@@ -27,21 +27,20 @@ export function flyToCoordinates(
   longitude: number,
   latitude: number
 ): void {
-  viewer.camera.flyTo({
-    destination: Cesium.Cartesian3.fromDegrees(
-      longitude,
-      latitude,
-      300 // metres above the surface; gives a good oblique view of the block
-    ),
-    orientation: {
+  const center = Cesium.Cartesian3.fromDegrees(longitude, latitude);
+  const boundingSphere = new Cesium.BoundingSphere(center, 0);
+
+  viewer.camera.flyToBoundingSphere(boundingSphere, {
+    offset: new Cesium.HeadingPitchRange(
       // A heading of 0 is due North. We start North-facing so the UI is
       // consistent across searches.
-      heading: Cesium.Math.toRadians(0),
+      Cesium.Math.toRadians(0),
       // Negative pitch tilts the camera down toward the ground.
-      // -90° gives a true top-down straight overhead view of the parcel boundaries.
-      pitch: Cesium.Math.toRadians(-90),
-      roll: 0,
-    },
+      // -45° gives a nice oblique view of the parcel boundaries and 3D buildings.
+      Cesium.Math.toRadians(-45),
+      // Range: 300 meters distance from the target center, so it backs up properly.
+      300 
+    ),
     duration: 2.0, // seconds — smooth but not sluggish
   });
 }

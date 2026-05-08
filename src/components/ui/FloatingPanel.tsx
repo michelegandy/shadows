@@ -34,7 +34,9 @@ function PropertyCard() {
 
   if (!parcel) return null;
 
-  const { OWNER1, ADDRESS } = parcel.properties;
+  const props = parcel.properties as any;
+  const owner = props.OWNER1 || props.owner1 || 'Unknown Owner';
+  const address = props.ADDRESS || props.address || 'Unknown Address';
 
   return (
     <div className="property-card" id="property-card" role="region" aria-label="Selected property">
@@ -57,8 +59,8 @@ function PropertyCard() {
         </button>
       </div>
       <div className="property-card-body">
-        <p className="property-address">{ADDRESS}</p>
-        <p className="property-owner">{OWNER1}</p>
+        <p className="property-address">{address}</p>
+        <p className="property-owner">{owner}</p>
       </div>
     </div>
   );

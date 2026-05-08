@@ -19,6 +19,7 @@ import 'cesium/Build/Cesium/Widgets/widgets.css';
 import { useStore } from '../../store/useStore';
 import { sliderValuesToJulianDate } from '../../utils/dateUtils';
 import { fetchParcelByCoords } from '../../hooks/useParcelQuery';
+import { flyToCoordinates } from '../../utils/cesiumHelpers';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -202,6 +203,7 @@ export function Globe({ viewerRef }: GlobeProps) {
             const parcel = await fetchParcelByCoords(lon, lat);
             useStore.getState().setSelectedParcel(parcel);
             useStore.getState().setSearchError(null);
+            flyToCoordinates(viewer, lon, lat);
           } catch (err: any) {
             useStore.getState().setSearchError(err.message || 'Could not find parcel at clicked location.');
           } finally {
